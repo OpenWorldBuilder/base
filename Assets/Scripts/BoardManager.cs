@@ -3,8 +3,7 @@ using System;
 using System.Collections.Generic; 		//Allows us to use Lists.
 using Random = UnityEngine.Random; 		//Tells Random to use the Unity Engine random number generator.
 
-namespace Completed
-	
+namespace ZombieLand
 {
 	
 	public class BoardManager : MonoBehaviour
@@ -163,11 +162,12 @@ namespace Completed
                 }
 
                 // Generate the row.
-                int startX = Random.Range((int)randomPosition.x, (int)randomPosition.x + 2);
+                int startX = (int)randomPosition.x + Random.Range(0, (int)(width / 2));
                 for (float x = startX; x < randomPosition.x + width; x++ )
                 {
                     //Instantiate tileChoice at the position returned by RandomPosition with no change in rotation
-                    Instantiate(resource, new Vector3(x, y, randomPosition.z), Quaternion.identity);
+                    GameObject obj = Instantiate(resource, new Vector3(x, y, randomPosition.z), Quaternion.identity);
+                    obj.tag = "Unbuildable";
 
                     objectCount--;
                 }

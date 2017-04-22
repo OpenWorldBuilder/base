@@ -39,6 +39,16 @@ public class CameraManager : MonoBehaviour
         {
             if (selectedTile != null)
             {
+                // Check there is not a grounditem here first. If there is we must remove it prior to building.
+                RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+                foreach (RaycastHit2D hit in hits)
+                {
+                    if (hit.collider.gameObject.tag == "Unbuildable")
+                    {
+                        return;
+                    }
+                }
+
                 // Round up position.
                 Vector3 objectPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 objectPos.x = Mathf.Round(objectPos.x / 1.0f) * 1.0f;

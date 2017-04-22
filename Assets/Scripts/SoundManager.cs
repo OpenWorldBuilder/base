@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Completed
+namespace ZombieLand
 {
-	public class SoundManager : MonoBehaviour 
+    public class SoundManager : MonoBehaviour 
 	{
 		public AudioSource efxSource;					//Drag a reference to the audio source which will play the sound effects.
 		public AudioSource musicSource;					//Drag a reference to the audio source which will play the music.

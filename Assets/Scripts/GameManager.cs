@@ -2,9 +2,9 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-namespace Completed
+namespace ZombieLand
 {
-	using System.Collections.Generic;		//Allows us to use Lists. 
+    using System.Collections.Generic;		//Allows us to use Lists. 
 	using UnityEngine.UI;					//Allows us to use UI.
 	
 	public class GameManager : MonoBehaviour
@@ -20,32 +20,27 @@ namespace Completed
 		private BoardManager boardScript;						//Store a reference to our BoardManager which will set up the level.
 		private CameraManager cameraMan;						//Store a reference to our BoardManager which will set up the level.
 		private int level = 1;									//Current level number, expressed in game as "Day 1".
-		private List<Enemy> enemies;							//List of all Enemy units, used to issue them move commands.
 		private bool enemiesMoving;								//Boolean to check if enemies are moving.
-		private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
-		
-		
-		
-		//Awake is always called before any Start functions
-		void Awake()
-		{
+		private bool doingSetup = true;                         //Boolean to check if we're setting up board, prevent Player from moving during setup.
+
+
+        //Awake is always called before any Start functions
+        void Awake()
+        {
             //Check if instance already exists
             if (instance == null)
-
+            {
                 //if not, set instance to this
                 instance = this;
-
-            //If instance already exists and it's not this:
+            }
             else if (instance != this)
-
+            {
                 //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
-                Destroy(gameObject);	
-			
-			//Sets this to not be destroyed when reloading scene
+                Destroy(gameObject);
+            }
+
+			// Sets this to not be destroyed when reloading scene.
 			DontDestroyOnLoad(gameObject);
-			
-			//Assign enemies to a new List of Enemy objects.
-			enemies = new List<Enemy>();
 			
 			//Get a component reference to the attached BoardManager script
 			boardScript = GetComponent<BoardManager>();

@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Completed
+namespace ZombieLand
 {
-	//Enemy inherits from MovingObject, our base class for objects that can move, Player also inherits from this.
-	public class Enemy : MovingObject
+    //Enemy inherits from MovingObject, our base class for objects that can move, Player also inherits from this.
+    public class Enemy : MovingObject
 	{
 		public int playerDamage; 							//The amount of food points to subtract from the player when attacking.
 		public AudioClip attackSound1;						//First of two audio clips to play when attacking the player.
@@ -27,7 +27,7 @@ namespace Completed
 			animator = GetComponent<Animator> ();
 			
 			//Find the Player GameObject using it's tag and store a reference to its transform component.
-			target = GameObject.FindGameObjectWithTag ("Player").transform;
+			target = GameObject.FindGameObjectWithTag ("Colonist").transform;
 			
 			//Call the start function of our base class MovingObject.
 			base.Start ();
@@ -74,7 +74,7 @@ namespace Completed
 				xDir = target.position.x > transform.position.x ? 1 : -1;
 			
 			//Call the AttemptMove function and pass in the generic parameter Player, because Enemy is moving and expecting to potentially encounter a Player
-			AttemptMove <Player> (xDir, yDir);
+			AttemptMove <Colonist> (xDir, yDir);
 		}
 		
 		
