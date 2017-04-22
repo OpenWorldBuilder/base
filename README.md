@@ -1,4 +1,4 @@
-Top-Down Unity Package
+Open World Builder
 ===
 
 This project aims to provide a set of features for a top-down 2D game development community.
