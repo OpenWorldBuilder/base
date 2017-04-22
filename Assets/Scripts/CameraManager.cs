@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
+    public int minZoom = 4;
+    public int maxZoom = 24;
     private GameObject selectedTile;
     private bool deleteMode;
 
@@ -19,7 +21,7 @@ public class CameraManager : MonoBehaviour
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
             Camera cam = GetComponent<Camera>();
-            if (cam.orthographicSize + 1 < 24)
+            if (cam.orthographicSize + 1 < maxZoom)
             {
                 cam.orthographicSize += 1;
             }
@@ -27,7 +29,7 @@ public class CameraManager : MonoBehaviour
         else if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
             Camera cam = GetComponent<Camera>();
-            if (cam.orthographicSize - 1 > 4)
+            if (cam.orthographicSize - 1 > minZoom)
             {
                 cam.orthographicSize -= 1;
             }
