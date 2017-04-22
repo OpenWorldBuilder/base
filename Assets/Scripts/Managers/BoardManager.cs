@@ -44,12 +44,12 @@ namespace WorldBuilder
 			gridPositions.Clear ();
 			
 			//Loop through x axis (columns).
-			for(int x = 1; x < columns-1; x++)
+			for(int x = 0; x < columns; x++)
 			{
                 List<Vector3> row = new List<Vector3>();
 
                 //Within each column, loop through y axis (rows).
-                for (int y = 1; y < rows-1; y++)
+                for (int y = 0; y < rows; y++)
 				{
                     //At each index add a new Vector3 to our list with the x and y coordinates of that position.
                     row.Add (new Vector3(x, y, 0f));
@@ -165,8 +165,21 @@ namespace WorldBuilder
                 int startX = (int)randomPosition.x + Random.Range(0, (int)(width / 2));
                 for (float x = startX; x < randomPosition.x + width; x++ )
                 {
+                    Vector3 mypos = new Vector3(x, y, randomPosition.z);
+                    int index = gridPositions[(int)x].IndexOf(mypos);
+                    // Check we can lay here using our primative method.
+                    if (index == -1)
+                    {
+                        objectCount--; // In case we get stuck.
+                        continue;
+                    }
+                    else
+                    {
+                        gridPositions[(int)x].RemoveAt(index);
+                    }
+
                     //Instantiate tileChoice at the position returned by RandomPosition with no change in rotation
-                    GameObject obj = Instantiate(resource, new Vector3(x, y, randomPosition.z), Quaternion.identity);
+                    GameObject obj = Instantiate(resource, mypos, Quaternion.identity);
                     obj.tag = "Unbuildable";
 
                     objectCount--;
