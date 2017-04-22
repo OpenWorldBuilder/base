@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c81ebb5a9a472b4f9be77b8725b246a, type: 3}
+  m_Name: BlueprintDatabase
+  m_EditorClassIdentifier: 
+  blueprints:
+  - ingredients: 
+    amount: 
+    finalItem:
+      itemName: 
+      itemID: 0
+      itemDesc: 
+      itemIcon: {fileID: 21300000, guid: 6dc5762501dd2df4da399f6c16a85907, type: 3}
+      itemModel: {fileID: 100000, guid: 40da790cc27843b45b9c255c8d996b43, type: 2}
+      itemValue: 0
+      itemType: 0
+      itemWeight: 0
+      maxStack: 0
+      indexItemInList: 0
+      rarity: 0
+      itemAttributes: []
+    amountOfFinalItem: 0
+    timeToCraft: 0
+  - ingredients: 0e000000
+    amount: 010000000000000000000000
+    finalItem:
+      itemName: Cooked Meat
+      itemID: 15
+      itemDesc: 'Very nice cooked meat.
+
+        + 20 Health'
+      itemIcon: {fileID: 21300000, guid: bb168a366e12e314ca3e7cec990092fe, type: 3}
+      itemModel: {fileID: 100000, guid: 40da790cc27843b45b9c255c8d996b43, type: 2}
+      itemValue: 1
+      itemType: 2
+      itemWeight: 0
+      maxStack: 5
+      indexItemInList: 999
+      rarity: 0
+      itemAttributes:
+      - attributeName: Health
+        attributeValue: 20
+    amountOfFinalItem: 1
+    timeToCraft: 0
+  - ingredients: 0e00000010000000
+    amount: 0100000001000000
+    finalItem:
+      itemName: Hamburger
+      itemID: 17
+      itemDesc: 'This hamburger gives you health and mana back.
+
+        + 20 Health
+
+        + 20 Mana'
+      itemIcon: {fileID: 21300000, guid: bad82843ddb69514c9b6b8e381d175f3, type: 3}
+      itemModel: {fileID: 100000, guid: 40da790cc27843b45b9c255c8d996b43, type: 2}
+      itemValue: 1
+      itemType: 2
+      itemWeight: 0
+      maxStack: 5
+      indexItemInList: 999
+      rarity: 0
+      itemAttributes:
+      - attributeName: Health
+        attributeValue: 20
+      - attributeName: Mana
+        attributeValue: 20
+    amountOfFinalItem: 2
+    timeToCraft: 0
+  - ingredients: 0c0000000d000000
+    amount: 0100000001000000
+    finalItem:
+      itemName: Applejuice
+      itemID: 18
+      itemDesc: 'This applejuice gives you alot of health back.
+
+        + 50 Health'
+      itemIcon: {fileID: 21300000, guid: 6dc5762501dd2df4da399f6c16a85907, type: 3}
+      itemModel: {fileID: 100000, guid: 40da790cc27843b45b9c255c8d996b43, type: 2}
+      itemValue: 2
+      itemType: 2
+      itemWeight: 0
+      maxStack: 5
+      indexItemInList: 999
+      rarity: 0
+      itemAttributes:
+      - attributeName: Health
+        attributeValue: 50
+    amountOfFinalItem: 2
+    timeToCraft: 0
