@@ -97,8 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f1c12d68040d9f46a7b80ec9a8fa3d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MultiThread: 1
-  ThreadsCount: 2
+  MultiThread: 0
+  ThreadsCount: 1
   PlannerSettings:
     PlanningEarlyExit: 0
     MaxIterations: 100

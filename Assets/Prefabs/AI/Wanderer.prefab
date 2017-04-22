@@ -27,6 +27,10 @@ GameObject:
   - component: {fileID: 114292950428789752}
   - component: {fileID: 114413408624967138}
   - component: {fileID: 114875405746348912}
+  - component: {fileID: 114158100335476228}
+  - component: {fileID: 114996021768043428}
+  - component: {fileID: 114335531238478330}
+  - component: {fileID: 114384554908738472}
   m_Layer: 0
   m_Name: Wanderer
   m_TagString: Untagged
@@ -72,6 +76,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &114158100335476228
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1417065200444622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9d4aada00e65f4abd5e378bd40cc21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 0
 --- !u!114 &114292950428789752
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -87,6 +103,33 @@ MonoBehaviour:
   initialState: {fileID: 114699027138710536}
   permitLoopTransition: 1
   orderTransitions: 0
+--- !u!114 &114335531238478330
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1417065200444622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c809fcfbc681647943ce6f20c996e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Go To Action
+  Cost: 1
+--- !u!114 &114384554908738472
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1417065200444622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0f4b6a91cae7064687bb21f9a13cb29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: GenericGoal
+  Priority: 1
+  ErrorDelay: 0.5
 --- !u!114 &114413408624967138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -157,8 +200,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d13dc73a0587d478db0c19ef2a2444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Wanderer
+  Name: Wander Action
   Cost: 1
+--- !u!114 &114996021768043428
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1417065200444622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5892808cd870494781173f224be91fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 1
+  WorkInFixedUpdate: 0
+  UseRigidBody: 0
+  UseRigidbodyVelocity: 0
+  Speed: 0
+  MinPowDistanceToObjective: 0.5
+  CheckForStuck: 0
+  StuckCheckDelay: 1
+  MaxStuckDistance: 0.1
 --- !u!212 &212647655564609540
 SpriteRenderer:
   m_ObjectHideFlags: 1

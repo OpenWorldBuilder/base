@@ -7,7 +7,7 @@ using ReGoap.Unity;
 namespace WorldBuilder.AI.Actions
 {
     [RequireComponent(typeof(SmsGoTo))]
-    public class GenericGoToAction : ReGoapAction<string, object>
+    public class GoTo : ReGoapAction<string, object>
     {
         // sometimes a Transform is better (moving target), sometimes you do not have one (last target position)
         //  but if you're using multi-thread approach you can't use a transform or any unity's API
@@ -48,6 +48,7 @@ namespace WorldBuilder.AI.Actions
         public override ReGoapState<string, object> GetEffects(ReGoapState<string, object> goalState, IReGoapAction<string, object> next = null)
         {
             var goalWantedPosition = GetWantedPositionFromState(goalState);
+
             if (goalWantedPosition.HasValue)
             {
                 effects.Set("isAtPosition", goalWantedPosition);
