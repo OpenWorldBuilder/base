@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WorldBuilder.AI;
 
 namespace WorldBuilder
 {
+    /**
+     * This (will be) an enemy manager for some wave-like spawning.
+     */
     public class EnemyManager : MonoBehaviour
     {
         public float turnDelay = 0.01f;							//Delay between each Player turn.
