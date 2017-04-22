@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace ZombieLand
+namespace WorldBuilder
 {
     public class Loader : MonoBehaviour 
 	{

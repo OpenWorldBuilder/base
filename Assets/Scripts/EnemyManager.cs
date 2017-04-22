@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ZombieLand
+namespace WorldBuilder
 {
     public class EnemyManager : MonoBehaviour
     {
