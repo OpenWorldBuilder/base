@@ -18,5 +18,16 @@ namespace WorldBuilder.AI
         {
             base.Update();
         }
+
+        //The abstract modifier indicates that the thing being modified has a missing or incomplete implementation.
+        //OnCantMove will be overriden by functions in the inheriting classes.
+        protected override void OnCantMove(GameObject collided)
+        {
+            AIBehaviour[] behaviours = GetComponents<AIBehaviour>();
+            foreach (AIBehaviour behaviour in behaviours)
+            {
+                behaviour.OnCantMove(collided);
+            }
+        }
     }
 }

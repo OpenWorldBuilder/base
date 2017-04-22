@@ -6,22 +6,19 @@ namespace WorldBuilder.AI
     //The abstract keyword enables you to create classes and class members that are incomplete and must be implemented in a derived class.
     public abstract class MovingObject : MonoBehaviour
     {
-        public float moveDelay = 1.0f;          // Delay after a move.
-        public float moveTime = 0.1f;           // Time it will take object to move, in seconds.
+        public float moveDelay = 5.0f;          // Delay after a move.
+        public float moveTime = 1.0f;           // Time it will take object to move, in seconds.
         public LayerMask blockingLayer;         // Layer on which collision will be checked.
 
         private BoxCollider2D boxCollider;      // The BoxCollider2D component attached to this object.
-        private Rigidbody2D rb2D;               // The Rigidbody2D component attached to this object.
         private float inverseMoveTime;          // Used to make movement more efficient.
+        private float epsilon = 0.75f;
 
         //Protected, virtual functions can be overridden by inheriting classes.
         protected virtual void Start()
         {
             //Get a component reference to this object's BoxCollider2D
             boxCollider = GetComponent<BoxCollider2D>();
-
-            //Get a component reference to this object's Rigidbody2D
-            rb2D = GetComponent<Rigidbody2D>();
 
             //By storing the reciprocal of the move time we can use it by multiplying instead of dividing, this is more efficient.
             inverseMoveTime = 1f / moveTime;
@@ -33,15 +30,15 @@ namespace WorldBuilder.AI
             // Do nothing.
         }
 
-        //Move returns true if it is able to move and false if not. 
+        //Move returns true if it is able to move and false if not.
         //Move takes parameters for x direction, y direction and a RaycastHit2D to check collision.
         protected bool Move(int xDir, int yDir, out RaycastHit2D hit)
         {
             //Store start position to move from, based on objects current transform position.
-            Vector2 start = transform.position;
+            Vector3 start = transform.position;
 
             // Calculate end position based on the direction parameters passed in when calling Move.
-            Vector2 end = start + new Vector2(xDir, yDir);
+            Vector3 end = start + new Vector3(xDir, yDir, 0.0f);
 
             //Disable the boxCollider so that linecast doesn't hit this object's own collider.
             boxCollider.enabled = false;
@@ -62,6 +59,8 @@ namespace WorldBuilder.AI
                 return true;
             }
 
+            Debug.Log(hit);
+
             //If something was hit, return false, Move was unsuccesful.
             return false;
         }
@@ -69,18 +68,18 @@ namespace WorldBuilder.AI
         //Co-routine for moving units from one space to next, takes a parameter end to specify where to move to.
         protected IEnumerator SmoothMovement(Vector3 end)
         {
-            //Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter. 
+            //Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter.
             //Square magnitude is used instead of magnitude because it's computationally cheaper.
             float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
 
             //While that distance is greater than a very small amount (Epsilon, almost zero):
-            while (sqrRemainingDistance > float.Epsilon)
+            while (sqrRemainingDistance > epsilon)
             {
                 //Find a new position proportionally closer to the end, based on the moveTime
-                Vector3 newPostion = Vector3.MoveTowards(rb2D.position, end, inverseMoveTime * Time.deltaTime);
+                Vector3 newPostion = Vector3.MoveTowards(transform.position, end, inverseMoveTime * Time.deltaTime);
 
-                //Call MovePosition on attached Rigidbody2D and move it to the calculated position.
-                rb2D.MovePosition(newPostion);
+                //Move to this position.
+                transform.position = newPostion;
 
                 //Recalculate the remaining distance after moving.
                 sqrRemainingDistance = (transform.position - end).sqrMagnitude;
@@ -105,8 +104,10 @@ namespace WorldBuilder.AI
 
             //Check if nothing was hit by linecast
             if (hit.transform == null)
+            {
                 //If nothing was hit, return and don't execute further code.
                 return;
+            }
 
             //Get a component reference to the component of type T attached to the object that was hit
             GameObject obj = hit.collider.gameObject;
@@ -119,9 +120,42 @@ namespace WorldBuilder.AI
             }
         }
 
+        // Move towards a Vector.
+        internal void MoveTowards(Vector3 vec)
+        {
+            //Declare variables for X and Y axis move directions, these range from -1 to 1.
+            //These values allow us to choose between the cardinal directions: up, down, left and right.
+            int xDir = 0;
+            int yDir = 0;
+
+            //If the difference in positions is not 1 cell do the following:
+            if (Mathf.Abs(vec.y - transform.position.y) > epsilon)
+            {
+                //If the y coordinate of the target's (player) position is greater than the y coordinate of this enemy's position set y direction 1 (to move up). If not, set it to -1 (to move down).
+                yDir = vec.y > transform.position.y ? 1 : -1;
+            }
+
+            //If the difference in positions is not 1 cell do the following:
+            if (Mathf.Abs(vec.x - transform.position.x) > epsilon)
+            {
+                //Check if target x position is greater than enemy's x position, if so set x direction to 1 (move right), if not set to -1 (move left).
+                xDir = vec.x > transform.position.x ? 1 : -1;
+            }
+
+            // If we can't move, we can't move.
+            if (xDir == 0 && yDir == 0)
+            {
+                OnCantMove(null);
+                return;
+            }
+
+            //Call the AttemptMove function and pass in the generic parameter Player, because Enemy is moving and expecting to potentially encounter a Player
+            AttemptMove(xDir, yDir);
+        }
+
         //The abstract modifier indicates that the thing being modified has a missing or incomplete implementation.
         //OnCantMove will be overriden by functions in the inheriting classes.
-        protected virtual void OnCantMove(GameObject obj)
+        protected virtual void OnCantMove(GameObject collided)
         {
             // Do nothing by default.
         }

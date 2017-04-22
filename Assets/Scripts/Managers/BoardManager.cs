@@ -83,11 +83,16 @@ namespace WorldBuilder
 					instance.transform.SetParent (boardHolder);
 				}
 			}
-		}
-		
-		
-		//RandomPosition returns a random position from our list gridPositions.
-		public Vector3 RandomPosition ()
+        }
+
+        //RandomPosition returns a random position on our board.
+        internal Vector3 RandomPosition()
+        {
+            return new Vector3(Random.Range(0, columns), Random.Range(0, rows), 0f);
+        }
+
+        //RandomGridPosition returns a random position from our list gridPositions.
+        private Vector3 RandomGridPosition ()
 		{
 			//Declare an integer randomIndex, set it's value to a random number between 0 and the count of items in our List gridPositions.
 			int randomIndex = Random.Range (0, gridPositions.Count);
@@ -122,7 +127,7 @@ namespace WorldBuilder
 			for(int i = 0; i < objectCount; i++)
 			{
 				//Choose a position for randomPosition by getting a random position from our list of available Vector3s stored in gridPosition
-				Vector3 randomPosition = RandomPosition();
+				Vector3 randomPosition = RandomGridPosition();
 				
 				//Choose a random tile from tileArray and assign it to tileChoice
 				GameObject tileChoice = tileArray[Random.Range (0, tileArray.Length)];
@@ -137,7 +142,7 @@ namespace WorldBuilder
         void LayoutVeinAtRandom(GameObject resource, int minimum, int maximum)
         {
             // Choose a position for randomPosition by getting a random position from our list of available Vector3s stored in gridPosition
-            Vector3 randomPosition = RandomPosition();
+            Vector3 randomPosition = RandomGridPosition();
 
             //Choose a random number of objects to instantiate within the minimum and maximum limits
             int objectCount = Random.Range(minimum, maximum + 1);
