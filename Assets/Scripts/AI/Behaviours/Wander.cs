@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace WorldBuilder.AI
 {
-    public class Wander : MonoBehaviour
+    public class Wander : Behaviour
     {
 
         // Use this for initialization
@@ -16,7 +16,7 @@ namespace WorldBuilder.AI
         // Update is called once per frame
         void Update()
         {
-
+            // Every now and then, choose a new place to wander to.
         }
     }
 }

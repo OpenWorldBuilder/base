@@ -6,13 +6,14 @@ namespace WorldBuilder.AI
     //The abstract keyword enables you to create classes and class members that are incomplete and must be implemented in a derived class.
     public abstract class MovingObject : MonoBehaviour
     {
-        public float moveTime = 0.1f;           //Time it will take object to move, in seconds.
-        public LayerMask blockingLayer;         //Layer on which collision will be checked.
-        
-        private BoxCollider2D boxCollider;      //The BoxCollider2D component attached to this object.
-        private Rigidbody2D rb2D;               //The Rigidbody2D component attached to this object.
-        private float inverseMoveTime;          //Used to make movement more efficient.
-        
+        public float moveDelay = 1.0f;          // Delay after a move.
+        public float moveTime = 0.1f;           // Time it will take object to move, in seconds.
+        public LayerMask blockingLayer;         // Layer on which collision will be checked.
+
+        private BoxCollider2D boxCollider;      // The BoxCollider2D component attached to this object.
+        private Rigidbody2D rb2D;               // The Rigidbody2D component attached to this object.
+        private float inverseMoveTime;          // Used to make movement more efficient.
+
         //Protected, virtual functions can be overridden by inheriting classes.
         protected virtual void Start()
         {
@@ -87,11 +88,14 @@ namespace WorldBuilder.AI
                 //Return and loop until sqrRemainingDistance is close enough to zero to end the function
                 yield return null;
             }
+
+            //Return and loop until sqrRemainingDistance is close enough to zero to end the function
+            yield return new WaitForSeconds(moveDelay);
         }
 
         //The virtual keyword means AttemptMove can be overridden by inheriting classes using the override keyword.
         //AttemptMove takes a generic parameter T to specify the type of component we expect our unit to interact with if blocked (Player for Enemies, Wall for Player).
-        protected virtual void AttemptMove(int xDir, int yDir)
+        internal virtual void AttemptMove(int xDir, int yDir)
         {
             //Hit will store whatever our linecast hits when Move is called.
             RaycastHit2D hit;

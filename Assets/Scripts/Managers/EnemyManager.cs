@@ -10,14 +10,14 @@ namespace WorldBuilder
      */
     public class EnemyManager : MonoBehaviour
     {
-        public float turnDelay = 0.01f;							//Delay between each Player turn.
-        private List<Enemy> enemies;                            //List of all Enemy units, used to issue them move commands.
+        public float waveDelay = 120;							     //Delay between each Wave spawn.
+        private List<GameObject> enemies;                            //List of all Enemy units, used to issue them move commands.
 
         // Awake is always called before any Start functions
         void Awake()
         {
             //Assign enemies to a new List of Enemy objects.
-            enemies = new List<Enemy>();
+            enemies = new List<GameObject>();
         }
 
         // Use this for initialization
@@ -31,38 +31,23 @@ namespace WorldBuilder
         void Update()
         {
             //Start moving enemies.
-            StartCoroutine(MoveEnemies());
+            StartCoroutine(SpawnEnemies());
         }
 
         //Call this to add the passed in Enemy to the List of Enemy objects.
-        public void AddEnemyToList(Enemy script)
+        public void AddEnemyToList(GameObject obj)
         {
             //Add Enemy to List enemies.
-            enemies.Add(script);
+            enemies.Add(obj);
         }
 
         //Coroutine to move enemies in sequence.
-        IEnumerator MoveEnemies()
+        IEnumerator SpawnEnemies()
         {
-            //Wait for turnDelay seconds, defaults to .1 (100 ms).
-            yield return new WaitForSeconds(turnDelay);
+            //Wait for waveDelay seconds, defaults to 120s.
+            yield return new WaitForSeconds(waveDelay);
 
-            //If there are no enemies spawned (IE in first level):
-            if (enemies.Count == 0)
-            {
-                //Wait for turnDelay seconds between moves, replaces delay caused by enemies moving when there are none.
-                yield return new WaitForSeconds(turnDelay);
-            }
-
-            //Loop through List of Enemy objects.
-            for (int i = 0; i < enemies.Count; i++)
-            {
-                //Call the MoveEnemy function of Enemy at index i in the enemies List.
-                enemies[i].MoveEnemy();
-
-                //Wait for Enemy's moveTime before moving next Enemy, 
-                yield return new WaitForSeconds(enemies[i].moveTime);
-            }
+            // TODO?
         }
     }
 }

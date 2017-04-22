@@ -87,7 +87,7 @@ namespace WorldBuilder
 		
 		
 		//RandomPosition returns a random position from our list gridPositions.
-		Vector3 RandomPosition ()
+		public Vector3 RandomPosition ()
 		{
 			//Declare an integer randomIndex, set it's value to a random number between 0 and the count of items in our List gridPositions.
 			int randomIndex = Random.Range (0, gridPositions.Count);
@@ -106,7 +106,7 @@ namespace WorldBuilder
 			return randomPosition;
 		}
 
-        internal Vector2 getCenter()
+        internal Vector2 GetCenter()
         {
             return new Vector2(columns / 2.0f, rows / 2.0f);
         }

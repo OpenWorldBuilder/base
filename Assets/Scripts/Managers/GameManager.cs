@@ -79,7 +79,7 @@ namespace WorldBuilder
 			boardScript.SetupScene();
 
             //Center the camera.
-            Vector2 vec = boardScript.getCenter();
+            Vector2 vec = boardScript.GetCenter();
             cameraMan.SetPosition(vec);
 
             // Set the world clock.

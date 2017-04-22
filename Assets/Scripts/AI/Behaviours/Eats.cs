@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace WorldBuilder.AI
 {
-    public class Eats : MonoBehaviour
+    public class Eats : Behaviour
     {
 
         // Use this for initialization

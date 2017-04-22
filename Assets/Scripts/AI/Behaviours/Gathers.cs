@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace WorldBuilder.AI
 {
-    public class Gathers : MonoBehaviour
+    public class Gathers : Behaviour
     {
 
         // Use this for initialization

@@ -96,7 +96,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb7e1437d26b8d24e974299b6af4695d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfColonists: 5
+  numberOfColonists: 1
+  colonistTypes:
+  - {fileID: 1417065200444622, guid: 5aa84c83d81b73b4db704957ddb984ce, type: 2}
 --- !u!114 &114641932790696068
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -108,4 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6988132d98d16374bb39b3a1987ad3a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnDelay: 0.01
+  waveDelay: 120
