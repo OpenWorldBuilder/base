@@ -127,10 +127,11 @@ namespace ZombieLand
 				
 				//Choose a random tile from tileArray and assign it to tileChoice
 				GameObject tileChoice = tileArray[Random.Range (0, tileArray.Length)];
-				
-				//Instantiate tileChoice at the position returned by RandomPosition with no change in rotation
-				Instantiate(tileChoice, randomPosition, Quaternion.identity);
-			}
+
+                //Instantiate tileChoice at the position returned by RandomPosition with no change in rotation
+                GameObject obj = Instantiate(tileChoice, randomPosition, Quaternion.identity);
+                obj.tag = "Unbuildable";
+            }
         }
 
         //LayoutObjectAtRandom accepts an array of game objects to choose from along with a minimum and maximum range for the number of objects to create.
@@ -178,7 +179,7 @@ namespace ZombieLand
 
 
         //SetupScene initializes our level and calls the previous functions to lay out the game board
-        public void SetupScene (int level)
+        public void SetupScene ()
 		{
 			//Creates the outer walls and floor.
 			BoardSetup ();
