@@ -2,6 +2,7 @@ fileFormatVersion: 2
 guid: c120b5a590d6ed140afaf7d2049f76bd
 labels:
 - Floor
+- Owned
 timeCreated: 1492781569
 licenseType: Free
 NativeFormatImporter:

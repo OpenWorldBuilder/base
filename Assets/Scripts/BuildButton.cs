@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class BuildButton : MonoBehaviour {
-    public Button yourButton;
     public GameObject tile;
 
     // Use this for initialization
@@ -17,6 +16,6 @@ public class BuildButton : MonoBehaviour {
     void TaskOnClick()
     {
         CameraManager cameraMan = Camera.main.GetComponent<CameraManager>();
-        cameraMan.selectedTile = tile;
+        cameraMan.EnterBuildMode(tile);
     }
 }

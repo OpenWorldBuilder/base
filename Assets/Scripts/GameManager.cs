@@ -103,7 +103,7 @@ namespace Completed
 
             //Center the camera.
             Vector2 vec = boardScript.getCenter();
-            cameraMan.setPosition(vec);
+            cameraMan.SetPosition(vec);
         }
 		
 		
