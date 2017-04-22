@@ -1,0 +1,4 @@
+[submodule "Assets/ReGoap"]
+	path = Assets/ReGoap
+	url = https://github.com/luxkun/ReGoap.git
+	branch = master
