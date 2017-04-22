@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 674311fed0e69dd47a4f3d761d8efd28
+labels:
+- Resource
+timeCreated: 1492852614
+licenseType: Free
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: base
+  assetBundleVariant: resource
