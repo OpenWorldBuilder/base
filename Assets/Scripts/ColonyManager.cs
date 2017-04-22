@@ -6,6 +6,7 @@ namespace WorldBuilder
 {
     public class ColonyManager : MonoBehaviour
     {
+        public int numberOfColonists = 5;
 
         // Use this for initialization
         void Start()

@@ -13,8 +13,11 @@ namespace WorldBuilder
         internal BoardManager boardScript;                       //Store a reference to our BoardManager which will set up the level.
         internal CameraManager cameraMan;						//Store a reference to our CameraManager which will set up the level.
         internal EnemyManager enemyManager;
-        private int day = 1;									//Current level number, expressed in game as "Day 1".
-		private bool doingSetup = true;                         //Boolean to check if we're setting up board, prevent Player from moving during setup.
+        internal ColonyManager colonyManager;
+        private int worldClock, worldClockDay, worldClockHour, worldClockMinute;
+        private float worldClockDelta;
+        private bool doingSetup = true;                         //Boolean to check if we're setting up board, prevent Player from moving during setup.
+        public int secondsPerMinute = 1;
 
 
         //Awake is always called before any Start functions
@@ -40,6 +43,9 @@ namespace WorldBuilder
 
             //Get a component reference to the attached EnemyManager script
             enemyManager = GetComponent<EnemyManager>();
+
+            //Get a component reference to the attached ColonyManager script
+            colonyManager = GetComponent<ColonyManager>();
 
             //Get a component reference to the attached CameraManager script
             cameraMan = Camera.main.GetComponent<CameraManager>();
@@ -76,6 +82,10 @@ namespace WorldBuilder
             Vector2 vec = boardScript.getCenter();
             cameraMan.SetPosition(vec);
 
+            // Set the world clock.
+            worldClock = worldClockDay = worldClockHour = worldClockMinute = 0;
+            worldClockDelta = (float)secondsPerMinute;
+
             //Set doingSetup to false allowing player to move again.
             doingSetup = false;
 
@@ -86,18 +96,56 @@ namespace WorldBuilder
 		//Update is called every frame.
 		void Update()
 		{
-			//Check that playersTurn or enemiesMoving or doingSetup are not currently true.
 			if (doingSetup)
             {
-                //If any of these are true, return and do not start MoveEnemies.
                 return;
             }
 
-            // TODO. If some time has passed, increment day count.
+            // Update the world clock.
+            worldClockDelta -= Time.deltaTime;
+            if (worldClockDelta <= 0)
+            {
+                UpdateWorldClock();
+            }
         }
-		
-		//GameOver is called when the player reaches 0 food points
-		public void GameOver()
+
+        // Update the world clock on tick because there's no telling how many times we might call
+        // the get methods elsewhere.
+        private void UpdateWorldClock()
+        {
+            worldClock++;
+            worldClockMinute++;
+
+            if (worldClockMinute > 60)
+            {
+                worldClockMinute = 0;
+                worldClockHour++;
+            }
+
+            if (worldClockHour > 24)
+            {
+                worldClockHour = 0;
+                worldClockDay++;
+            }
+        }
+
+        public int GetDay()
+        {
+            return worldClockDay;
+        }
+
+        public int GetHour()
+        {
+            return worldClockHour;
+        }
+
+        public int GetMinute()
+        {
+            return worldClockMinute;
+        }
+
+        //GameOver is called when the player reaches 0 food points
+        public void GameOver()
 		{
 			//Disable this GameManager.
 			enabled = false;
