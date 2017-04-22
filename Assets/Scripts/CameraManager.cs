@@ -61,6 +61,7 @@ public class CameraManager : MonoBehaviour
                     if (hit.collider != null && hit.collider.gameObject.tag == "Owned")
                     {
                         Destroy(hit.collider.gameObject);
+                        break;
                     }
                 }
             }
