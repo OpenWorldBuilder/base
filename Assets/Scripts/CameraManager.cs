@@ -11,8 +11,9 @@ namespace WorldBuilder
         public int maxZoom = 24;
         private GameObject selectedTile;
         private bool deleteMode;
+        private Vector3 lastMousePos;
 
-        void Update()
+        void LateUpdate()
         {
             // Check for movement.
             float x = Input.GetAxisRaw("Horizontal");
@@ -39,45 +40,17 @@ namespace WorldBuilder
 
 
             // Have we clicked the world?
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButton(0))
             {
-                if (selectedTile != null)
+                // Translate mouse location to world location.
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mousePos.x = Mathf.Round(mousePos.x / 1.0f) * 1.0f;
+                mousePos.y = Mathf.Round(mousePos.y / 1.0f) * 1.0f;
+                mousePos.z = 1.0f;
+                if (mousePos != lastMousePos)
                 {
-                    // Check there is not a grounditem here first. If there is we must remove it prior to building.
-                    RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-                    foreach (RaycastHit2D hit in hits)
-                    {
-                        if (hit.collider.gameObject.tag == "Unbuildable")
-                        {
-                            return;
-                        }
-                    }
-
-                    // Round up position.
-                    Vector3 objectPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    objectPos.x = Mathf.Round(objectPos.x / 1.0f) * 1.0f;
-                    objectPos.y = Mathf.Round(objectPos.y / 1.0f) * 1.0f;
-                    objectPos.z = 1.0f;
-
-                    // Instantiate an object here.
-                    GameObject obj = Instantiate(selectedTile, objectPos, Quaternion.identity);
-                    obj.tag = "Owned";
-
-                    return;
-                }
-
-                if (deleteMode)
-                {
-                    // Find an object here, if we do, delete it.
-                    RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-                    foreach (RaycastHit2D hit in hits)
-                    {
-                        if (hit.collider != null && hit.collider.gameObject.tag == "Owned")
-                        {
-                            Destroy(hit.collider.gameObject);
-                            break;
-                        }
-                    }
+                    OnMouseDown(mousePos);
+                    lastMousePos = mousePos;
                 }
             }
 
@@ -89,18 +62,70 @@ namespace WorldBuilder
             }
         }
 
+        /**
+         * Called when the mouse is down in the given frame, and we have moved.
+         */
+        internal void OnMouseDown(Vector3 mousePos)
+        {
+            // Are we building?
+            if (selectedTile != null)
+            {
+                String layerName = selectedTile.GetComponent<SpriteRenderer>().sortingLayerName;
+
+                // Check there is not a grounditem here first. If there is we must remove it prior to building.
+                RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+                foreach (RaycastHit2D hit in hits)
+                {
+                    if (hit.collider.gameObject.tag == "Unbuildable" || hit.collider.gameObject.GetComponent<SpriteRenderer>().sortingLayerName == layerName)
+                    {
+                        return;
+                    }
+                }
+
+                // Instantiate an object here.
+                GameObject obj = Instantiate(selectedTile, mousePos, Quaternion.identity);
+                obj.tag = "Owned";
+
+                return;
+            }
+
+            // Are we deleting?
+            if (deleteMode)
+            {
+                // Find an object here, if we do, delete it.
+                RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+                foreach (RaycastHit2D hit in hits)
+                {
+                    if (hit.collider != null && hit.collider.gameObject.tag == "Owned")
+                    {
+                        Destroy(hit.collider.gameObject);
+                        break;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Enter delete mode.
+         */
         internal void EnterDeleteMode()
         {
             selectedTile = null;
             deleteMode = true;
         }
 
+        /**
+         * Enter build mode.
+         */
         internal void EnterBuildMode(GameObject tile)
         {
             selectedTile = tile;
             deleteMode = false;
         }
 
+        /**
+         * Set the position of the camera.
+         */
         internal void SetPosition(Vector2 vec)
         {
             transform.position = new Vector3(vec.x, vec.y, transform.position.z);

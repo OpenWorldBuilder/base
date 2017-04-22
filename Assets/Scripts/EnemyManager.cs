@@ -8,7 +8,6 @@ namespace WorldBuilder
     {
         public float turnDelay = 0.01f;							//Delay between each Player turn.
         private List<Enemy> enemies;                            //List of all Enemy units, used to issue them move commands.
-        private bool enemiesMoving;								//Boolean to check if enemies are moving.
 
         // Awake is always called before any Start functions
         void Awake()
@@ -41,9 +40,6 @@ namespace WorldBuilder
         //Coroutine to move enemies in sequence.
         IEnumerator MoveEnemies()
         {
-            //While enemiesMoving is true player is unable to move.
-            enemiesMoving = true;
-
             //Wait for turnDelay seconds, defaults to .1 (100 ms).
             yield return new WaitForSeconds(turnDelay);
 
@@ -63,9 +59,6 @@ namespace WorldBuilder
                 //Wait for Enemy's moveTime before moving next Enemy, 
                 yield return new WaitForSeconds(enemies[i].moveTime);
             }
-
-            //Enemies are done moving, set enemiesMoving to false.
-            enemiesMoving = false;
         }
     }
 }
