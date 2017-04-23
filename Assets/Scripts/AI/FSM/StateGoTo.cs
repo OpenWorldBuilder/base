@@ -78,7 +78,15 @@ namespace WorldBuilder.AI.FSM
 
         protected virtual void MoveTo(Vector3 position)
         {
-            var delta = position - transform.position;
+            // Get the actual target from pathfinder.
+            Vector3? actualtarget = GameManager.instance.pathfinder.NextNode(transform.position, position);
+            if (actualtarget == null)
+            {
+                currentState = GoToState.Failure;
+                return;
+            }
+
+            Vector3 delta = (Vector3)actualtarget - transform.position;
             var movement = delta.normalized * GetSpeed();
             if (UseRigidBody)
             {

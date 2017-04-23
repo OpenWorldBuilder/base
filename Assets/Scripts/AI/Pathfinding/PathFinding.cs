@@ -64,6 +64,9 @@ namespace WorldBuilder.AI.PathFinding
         // Get a path to a location.
         public Vector3? NextNode(Vector3 from, Vector3 to)
         {
+            from = new Vector3(Mathf.Round(from.x), Mathf.Round(from.y), 0.0f);
+            to = new Vector3(Mathf.Round(to.x), Mathf.Round(to.y), 0.0f);
+
             PathNode fromNode;
             if (!boardstate.TryGetValue(from, out fromNode))
             {
@@ -84,6 +87,8 @@ namespace WorldBuilder.AI.PathFinding
         // Called when the boardmanager becomes aware of a new item being placed.
         public void OnBoardUpdate(Vector3 pos, GameObject obj)
         {
+            pos.z = 0.0f;
+
             PathNode value;
             if (!boardstate.TryGetValue(pos, out value))
             {

@@ -12,7 +12,7 @@ namespace WorldBuilder
 	{
 		public static GameManager instance = null;
         internal BoardManager boardScript;
-        internal PathFinding pathfinder;
+        public PathFinding pathfinder;
         internal CameraManager cameraMan;
         internal EnemyManager enemyManager;
         internal ColonyManager colonyManager;
@@ -63,7 +63,7 @@ namespace WorldBuilder
         public bool RemoveObjectAt(Vector3 pos, string tag = "*")
         {
             // Find an object here, if we do, delete it.
-            RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(pos, Vector2.zero);
             foreach (RaycastHit2D hit in hits)
             {
                 if (hit.collider != null && (tag == "*" || hit.collider.gameObject.tag == tag))
@@ -91,13 +91,13 @@ namespace WorldBuilder
         {
             instance.InitGame();
         }
-		
+
 		//Initializes the game for each level.
 		void InitGame()
 		{
 			//While doingSetup is true the player can't move, prevent player from moving while title card is up.
 			doingSetup = true;
-			
+
 			//Call the SetupScene function of the BoardManager script, pass it current level number.
 			boardScript.SetupScene();
 
@@ -115,7 +115,7 @@ namespace WorldBuilder
             // Remove the loading screen.
             GameObject.Find("LevelImage").SetActive(false);
         }
-		
+
 		//Update is called every frame.
 		void Update()
 		{
@@ -175,4 +175,3 @@ namespace WorldBuilder
 		}
 	}
 }
-
