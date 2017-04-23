@@ -103,7 +103,7 @@ MonoBehaviour:
     PlanningEarlyExit: 0
     MaxIterations: 100
     MaxNodesToExpand: 1000
-    UsingDynamicActions: 0
+    UsingDynamicActions: 1
   LogLevel: 3
   NodeWarmupCount: 1000
   StatesWarmupCount: 10000

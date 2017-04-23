@@ -1,24 +1,25 @@
 ﻿using System;
 using ReGoap.Core;
-using ReGoap.Unity.FSMExample.FSM;
 using UnityEngine;
 using ReGoap.Unity;
+using WorldBuilder.AI.FSM;
+using ReGoap.Utilities;
 
 namespace WorldBuilder.AI.Actions
 {
-    [RequireComponent(typeof(SmsGoTo))]
+    [RequireComponent(typeof(StateGoTo))]
     public class GoTo : ReGoapAction<string, object>
     {
         // sometimes a Transform is better (moving target), sometimes you do not have one (last target position)
         //  but if you're using multi-thread approach you can't use a transform or any unity's API
-        protected SmsGoTo smsGoto;
+        protected StateGoTo smsGoto;
 
         protected override void Awake()
         {
             base.Awake();
 
             SetDefaultEffects();
-            smsGoto = GetComponent<SmsGoTo>();
+            smsGoto = GetComponent<StateGoTo>();
         }
 
         protected virtual void SetDefaultEffects()
@@ -48,7 +49,6 @@ namespace WorldBuilder.AI.Actions
         public override ReGoapState<string, object> GetEffects(ReGoapState<string, object> goalState, IReGoapAction<string, object> next = null)
         {
             var goalWantedPosition = GetWantedPositionFromState(goalState);
-
             if (goalWantedPosition.HasValue)
             {
                 effects.Set("isAtPosition", goalWantedPosition);

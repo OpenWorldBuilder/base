@@ -180,5 +180,10 @@ namespace WorldBuilder.AI.FSM
                 onFailureMovementCallback();
         }
         #endregion
+
+        public override string ToString()
+        {
+            return string.Format("GoapState('GoTo: {0}')", objective);
+        }
     }
 }

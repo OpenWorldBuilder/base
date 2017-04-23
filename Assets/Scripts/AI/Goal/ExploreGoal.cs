@@ -15,7 +15,7 @@ namespace WorldBuilder.AI.Goal
 
         public override string ToString()
         {
-            return string.Format("GoapGoal('{0}')", Name);
+            return string.Format("GoapGoal('ExploreGoal: {0}')", Name);
         }
     }
 }
