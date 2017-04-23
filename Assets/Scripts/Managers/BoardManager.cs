@@ -194,7 +194,6 @@ namespace WorldBuilder
             }
         }
 
-
         //SetupScene initializes our level and calls the previous functions to lay out the game board
         public void SetupScene ()
 		{

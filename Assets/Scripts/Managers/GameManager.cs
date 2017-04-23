@@ -5,18 +5,20 @@ using System.Collections;
 namespace WorldBuilder
 {
     using System.Collections.Generic;		//Allows us to use Lists. 
-	using UnityEngine.UI;					//Allows us to use UI.
-	
-	public class GameManager : MonoBehaviour
+	using UnityEngine.UI;                   //Allows us to use UI.
+    using WorldBuilder.AI.PathFinding;
+
+    public class GameManager : MonoBehaviour
 	{
-		public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
-        internal BoardManager boardScript;                       //Store a reference to our BoardManager which will set up the level.
-        internal CameraManager cameraMan;						//Store a reference to our CameraManager which will set up the level.
+		public static GameManager instance = null;
+        internal BoardManager boardScript;
+        internal PathFinding pathfinder;
+        internal CameraManager cameraMan;
         internal EnemyManager enemyManager;
         internal ColonyManager colonyManager;
         private int worldClock, worldClockDay, worldClockHour, worldClockMinute;
         private float worldClockDelta;
-        private bool doingSetup = true;                         //Boolean to check if we're setting up board, prevent Player from moving during setup.
+        private bool doingSetup = true;
         public int secondsPerMinute = 1;
 
 
@@ -38,21 +40,42 @@ namespace WorldBuilder
 			// Sets this to not be destroyed when reloading scene.
 			DontDestroyOnLoad(gameObject);
 
-            //Get a component reference to the attached BoardManager script
+            // Get our component references.
             boardScript = GetComponent<BoardManager>();
-
-            //Get a component reference to the attached EnemyManager script
             enemyManager = GetComponent<EnemyManager>();
-
-            //Get a component reference to the attached ColonyManager script
             colonyManager = GetComponent<ColonyManager>();
-
-            //Get a component reference to the attached CameraManager script
             cameraMan = Camera.main.GetComponent<CameraManager>();
+            pathfinder = GetComponent<PathFinding>();
 
             //Call the InitGame function to initialize the first level 
             InitGame();
-		}
+        }
+
+        // Add a new object to the board.
+        public GameObject AddObjectAt(GameObject obj, Vector3 pos)
+        {
+            GameObject newobj = Instantiate(obj, pos, Quaternion.identity);
+            pathfinder.OnBoardUpdate(pos, newobj);
+            return newobj;
+        }
+
+        // Add a new object to the board.
+        public bool RemoveObjectAt(Vector3 pos, string tag = "*")
+        {
+            // Find an object here, if we do, delete it.
+            RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            foreach (RaycastHit2D hit in hits)
+            {
+                if (hit.collider != null && (tag == "*" || hit.collider.gameObject.tag == tag))
+                {
+                    Destroy(hit.collider.gameObject);
+                    pathfinder.OnBoardUpdate(pos, null);
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         //this is called only once, and the paramter tell it to be called only after the scene was loaded
         //(otherwise, our Scene Load callback would be called the very first load, and we don't want that)

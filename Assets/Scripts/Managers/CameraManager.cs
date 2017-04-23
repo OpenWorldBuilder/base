@@ -83,7 +83,7 @@ namespace WorldBuilder
                 }
 
                 // Instantiate an object here.
-                GameObject obj = Instantiate(selectedTile, mousePos, Quaternion.identity);
+                GameObject obj = GameManager.instance.AddObjectAt(selectedTile, mousePos);
                 obj.tag = "Owned";
 
                 return;
@@ -92,16 +92,7 @@ namespace WorldBuilder
             // Are we deleting?
             if (deleteMode)
             {
-                // Find an object here, if we do, delete it.
-                RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-                foreach (RaycastHit2D hit in hits)
-                {
-                    if (hit.collider != null && hit.collider.gameObject.tag == "Owned")
-                    {
-                        Destroy(hit.collider.gameObject);
-                        break;
-                    }
-                }
+                GameManager.instance.RemoveObjectAt(Camera.main.ScreenToWorldPoint(Input.mousePosition), "Owned");
             }
         }
 
