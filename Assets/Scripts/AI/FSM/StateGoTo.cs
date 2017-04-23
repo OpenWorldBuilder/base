@@ -12,6 +12,7 @@ namespace WorldBuilder.AI.FSM
     [RequireComponent(typeof(StateIdle))]
     public class StateGoTo : SmState
     {
+        public GameObject marker;
         private Vector3? objective;
         private Transform objectiveTransform;
         private Action onDoneMovementCallback;
@@ -79,12 +80,14 @@ namespace WorldBuilder.AI.FSM
         protected virtual void MoveTo(Vector3 position)
         {
             // Get the actual target from pathfinder.
+            Instantiate(marker, position, Quaternion.identity);
             Vector3? actualtarget = GameManager.instance.pathfinder.NextNode(transform.position, position);
             if (actualtarget == null)
             {
                 currentState = GoToState.Failure;
                 return;
             }
+            Instantiate(marker, (Vector3)actualtarget, Quaternion.identity);
 
             Vector3 delta = (Vector3)actualtarget - transform.position;
             var movement = delta.normalized * GetSpeed();

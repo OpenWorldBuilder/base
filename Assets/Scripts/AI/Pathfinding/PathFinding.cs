@@ -41,19 +41,19 @@ namespace WorldBuilder.AI.PathFinding
             Vector3 vec = node.position;
 
             //Loop along x axis.
-            for (int x = -1; x < 1; x++)
+            for (int x = -1; x <= 1; x++)
             {
-                if (x == 0) { continue; }
                 //Loop along y axis.
-                for (int y = -1; y < 1; y++)
+                for (int y = -1; y <= 1; y++)
                 {
-                    if (y == 0) { continue; }
-
                     // Try to grab a child.
                     PathNode child;
                     if (boardstate.TryGetValue(new Vector3(vec.x + x, vec.y + y, 0f), out child))
                     {
-                        children.Add(child);
+                        if (child.position != node.position)
+                        {
+                            children.Add(child);
+                        }
                     }
                 }
             }

@@ -34,7 +34,7 @@ namespace WorldBuilder.AI.PathFinding
             String layer = obj.GetComponent<SpriteRenderer>().sortingLayerName;
             if (layer != "Floor" && layer != "GroundItems")
             {
-                extraCost = 999999999.0f;
+                extraCost = 9999999.0f;
             }
         }
 
@@ -50,18 +50,28 @@ namespace WorldBuilder.AI.PathFinding
             return extraCost + xDelta + yDelta;
         }
 
-        internal float GetPathCost(Vector3 destination, float bestCost = 0.0f)
+        internal float GetPathCost(Vector3 destination, List<PathNode> visited, float bestCost = 0.0f)
         {
+            visited.Add(this);
+
+            // Calculate our cost.
             float cost = GetNodeCost(destination);
             if (bestCost > float.Epsilon && bestCost < cost)
             {
                 return 9999999.0f; // Cancel out early, A* style.
             }
 
+            // Calculate child cost.
             float minCost = bestCost;
             foreach (PathNode node in children)
             {
-                float nodeCost = node.GetPathCost(destination, minCost);
+                if (visited.Contains(node))
+                {
+                    continue;
+                }
+
+                // We're clear!
+                float nodeCost = node.GetPathCost(destination, visited, minCost);
                 if (minCost <= float.Epsilon || minCost > nodeCost)
                 {
                     minCost = nodeCost;
@@ -77,7 +87,7 @@ namespace WorldBuilder.AI.PathFinding
             float minCost = 0.0f;
             foreach (PathNode node in children)
             {
-                float cost = node.GetPathCost(destination, minCost);
+                float cost = node.GetPathCost(destination, new List<PathNode>(), minCost);
                 if (minCost <= float.Epsilon || minCost > cost)
                 {
                     best = node.position;

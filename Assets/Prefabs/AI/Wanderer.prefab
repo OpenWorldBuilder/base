@@ -128,10 +128,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 0
+  marker: {fileID: 1254511818808130, guid: 61d8e2edb5528574a8dbdbe19620cc31, type: 2}
   WorkInFixedUpdate: 1
   UseRigidBody: 0
   UseRigidbodyVelocity: 0
-  Speed: 5
+  Speed: 1
   MinPowDistanceToObjective: 0.5
   CheckForStuck: 0
   StuckCheckDelay: 1
