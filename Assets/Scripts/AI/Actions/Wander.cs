@@ -1,5 +1,6 @@
 ﻿using ReGoap.Core;
 using ReGoap.Unity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,12 @@ namespace WorldBuilder.AI.Actions
             preconditions.Clear();
             preconditions.Set("isAtPosition", GameManager.instance.boardScript.RandomPosition());
             return preconditions;
+        }
+
+        public override void Run(IReGoapAction<string, object> previous, IReGoapAction<string, object> next, IReGoapActionSettings<string, object> settings, ReGoapState<string, object> goalState, Action<IReGoapAction<string, object>> done, Action<IReGoapAction<string, object>> fail)
+        {
+            base.Run(previous, next, settings, goalState, done, fail);
+            done(this);
         }
 
         public override string ToString()

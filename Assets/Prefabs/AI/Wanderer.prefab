@@ -27,6 +27,7 @@ GameObject:
   - component: {fileID: 114413408624967138}
   - component: {fileID: 114384554908738472}
   - component: {fileID: 114899162710755668}
+  - component: {fileID: 114262896338882754}
   - component: {fileID: 114833284292303018}
   m_Layer: 0
   m_Name: Wanderer
@@ -73,6 +74,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &114262896338882754
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1417065200444622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46d13dc73a0587d478db0c19ef2a2444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: GoapAction
+  Cost: 1
 --- !u!114 &114292950428789752
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -117,7 +131,7 @@ MonoBehaviour:
   WorkInFixedUpdate: 1
   UseRigidBody: 0
   UseRigidbodyVelocity: 0
-  Speed: 2
+  Speed: 5
   MinPowDistanceToObjective: 0.5
   CheckForStuck: 0
   StuckCheckDelay: 1
