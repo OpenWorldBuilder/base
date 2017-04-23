@@ -1,4 +1,4 @@
 [submodule "Assets/ReGoap"]
 	path = Assets/ReGoap
-	url = https://github.com/luxkun/ReGoap.git
+	url = git@github.com:OpenWorldBuilder/ReGoap.git
 	branch = master
