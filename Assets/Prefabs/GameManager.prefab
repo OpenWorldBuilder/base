@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7d59e4dfb9c9404b9471de0c983feac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pathfinder: {fileID: 0}
   secondsPerMinute: 1
 --- !u!114 &11433658
 MonoBehaviour:
@@ -60,8 +61,8 @@ MonoBehaviour:
   columns: 64
   rows: 64
   veinCount:
-    minimum: 6
-    maximum: 20
+    minimum: 5
+    maximum: 10
   veinSize:
     minimum: 5
     maximum: 35

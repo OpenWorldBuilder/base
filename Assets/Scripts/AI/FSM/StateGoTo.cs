@@ -2,6 +2,7 @@
 using ReGoap.Unity.FSM;
 using ReGoap.Utilities;
 using UnityEngine;
+using System.Collections.Generic;
 
 // generic goto state, can be used in most games, override Tick and Enter if you are using 
 //  a navmesh / pathfinding library 
@@ -38,6 +39,9 @@ namespace WorldBuilder.AI.FSM
         public bool CheckForStuck;
         public float StuckCheckDelay = 1f;
         public float MaxStuckDistance = 0.1f;
+
+        private Vector3 pathTarget;
+        private List<Vector3> path;
 
         protected override void Awake()
         {
@@ -79,15 +83,33 @@ namespace WorldBuilder.AI.FSM
 
         protected virtual void MoveTo(Vector3 position)
         {
-            // Get the actual target from pathfinder.
-            Instantiate(marker, position, Quaternion.identity);
-            Vector3? actualtarget = GameManager.instance.pathfinder.NextNode(transform.position, position);
-            if (actualtarget == null)
+            // Generate a path once.
+            if (pathTarget == null || (position.x != pathTarget.x || position.y != pathTarget.y))
+            {
+                pathTarget = position;
+                path = GameManager.instance.pathfinder.GetPath(transform.position, position);
+                if (path == null || path.Count <= 0)
+                {
+                    currentState = GoToState.Failure;
+                    return;
+                }
+
+                Debug.Log("Regenerating path: " + path);
+            }
+
+            if (path.Count <= 0)
             {
                 currentState = GoToState.Failure;
                 return;
             }
-            Instantiate(marker, (Vector3)actualtarget, Quaternion.identity);
+
+            // Get the actual target from pathfinder.
+            Vector3 actualtarget = path[0];
+            if (transform.position == actualtarget)
+            {
+                path.Remove(actualtarget);
+                return;
+            }
 
             Vector3 delta = (Vector3)actualtarget - transform.position;
             var movement = delta.normalized * GetSpeed();

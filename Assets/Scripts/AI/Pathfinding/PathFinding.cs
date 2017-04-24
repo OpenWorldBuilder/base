@@ -8,13 +8,15 @@ namespace WorldBuilder.AI.PathFinding
     public class PathFinding : MonoBehaviour
     {
         internal BoardManager boardScript;
-        private Dictionary<Vector3, PathNode> boardstate;
+        Dictionary<Vector3, Dictionary<Vector3, int>> boardstate;
+        Dictionary<Vector3, Dictionary<Vector3, List<Vector3>>> cache;
 
         //Awake is always called before any Start functions
         void Awake()
         {
             boardScript = GetComponent<BoardManager>();
-            boardstate = new Dictionary<Vector3, PathNode>(boardScript.columns * boardScript.rows);
+            boardstate = new Dictionary<Vector3, Dictionary<Vector3, int>>(boardScript.columns * boardScript.rows);
+            cache = new Dictionary<Vector3, Dictionary<Vector3, List<Vector3>>>();
 
             //Loop along x axis.
             for (int x = 0; x < boardScript.columns; x++)
@@ -23,38 +25,30 @@ namespace WorldBuilder.AI.PathFinding
                 for (int y = 0; y < boardScript.rows; y++)
                 {
                     Vector3 vec = new Vector3(x, y, 0f);
-                    boardstate.Add(vec, new PathNode(vec));
-                }
-            }
 
-            // Set all children.
-            foreach (PathNode node in boardstate.Values)
-            {
-                node.SetChildren(GetChildren(node));
+                    Dictionary<Vector3, int> surrounding = new Dictionary<Vector3, int>();
+                    boardstate.Add(vec, BuildChildren(vec));
+                }
             }
         }
 
         // Given a PathNode, get all nodes around it.
-        private List<PathNode> GetChildren(PathNode node)
+        private Dictionary<Vector3, int> BuildChildren(Vector3 vec)
         {
-            List<PathNode> children = new List<PathNode>();
-            Vector3 vec = node.position;
+            Dictionary<Vector3, int> children = new Dictionary<Vector3, int>();
 
             //Loop along x axis.
-            for (int x = -1; x <= 1; x++)
+            for (float x = vec.x - 1; x <= vec.x + 1; x++)
             {
                 //Loop along y axis.
-                for (int y = -1; y <= 1; y++)
+                for (float y = vec.y - 1; y <= vec.y + 1; y++)
                 {
-                    // Try to grab a child.
-                    PathNode child;
-                    if (boardstate.TryGetValue(new Vector3(vec.x + x, vec.y + y, 0f), out child))
+                    if (x < 0 || y < 0 || x > boardScript.columns -1 || y > boardScript.rows -1 || (vec.x == x && vec.y == y))
                     {
-                        if (child.position != node.position)
-                        {
-                            children.Add(child);
-                        }
+                        continue;
                     }
+
+                    children.Add(new Vector3(x, y, 0f), 1);
                 }
             }
 
@@ -62,26 +56,82 @@ namespace WorldBuilder.AI.PathFinding
         }
 
         // Get a path to a location.
-        public Vector3? NextNode(Vector3 from, Vector3 to)
+        public List<Vector3> GetPath(Vector3 from, Vector3 to)
         {
             from = new Vector3(Mathf.Round(from.x), Mathf.Round(from.y), 0.0f);
             to = new Vector3(Mathf.Round(to.x), Mathf.Round(to.y), 0.0f);
 
-            PathNode fromNode;
-            if (!boardstate.TryGetValue(from, out fromNode))
+            if (cache.ContainsKey(from) && cache[from].ContainsKey(to))
             {
-                Debug.Log("Invalid from position in pathfinder NextNode!");
-                return null;
+                return cache[from][to];
             }
 
-            PathNode toNode;
-            if (!boardstate.TryGetValue(to, out toNode) || toNode.extraCost >= 999999999.0f)
+            var previous = new Dictionary<Vector3, Vector3>();
+            var distances = new Dictionary<Vector3, int>();
+            var nodes = new List<Vector3>();
+
+            List<Vector3> path = null;
+
+            foreach (var vertex in boardstate)
             {
-                Debug.Log("Invalid to position in pathfinder NextNode!");
-                return null;
+                if (vertex.Key == from)
+                {
+                    distances[vertex.Key] = 0;
+                }
+                else
+                {
+                    distances[vertex.Key] = int.MaxValue;
+                }
+
+                nodes.Add(vertex.Key);
             }
 
-            return fromNode.GetBestNext(to);
+            while (nodes.Count > 0)
+            {
+                nodes.Sort((x, y) => distances[x] - distances[y]); // TODO - add heuristic algorithm based on raycast?
+
+                Vector3 smallest = nodes[0];
+                if (!nodes.Remove(smallest))
+                {
+                    return null;
+                }
+
+                if (smallest == to)
+                {
+                    path = new List<Vector3>();
+                    while (previous.ContainsKey(smallest))
+                    {
+                        path.Add(smallest);
+                        smallest = previous[smallest];
+                    }
+
+                    break;
+                }
+
+                if (distances[smallest] == int.MaxValue)
+                {
+                    break;
+                }
+
+                foreach (var neighbor in boardstate[smallest])
+                {
+                    int alt = distances[smallest] + neighbor.Value;
+                    if (alt < distances[neighbor.Key])
+                    {
+                        distances[neighbor.Key] = alt;
+                        previous[neighbor.Key] = smallest;
+                    }
+                }
+            }
+
+            if (!cache.ContainsKey(from))
+            {
+                cache[from] = new Dictionary<Vector3, List<Vector3>>();
+            }
+
+            cache[from][to] = path;
+
+            return path;
         }
 
         // Called when the boardmanager becomes aware of a new item being placed.
@@ -89,14 +139,33 @@ namespace WorldBuilder.AI.PathFinding
         {
             pos.z = 0.0f;
 
-            PathNode value;
+            int cost = 1;
+ 
+            // Is this a wall?
+            string layer = obj.GetComponent<SpriteRenderer>().sortingLayerName;
+            if (layer != "Floor" && layer != "GroundItems")
+            {
+                cost = int.MaxValue;
+            }
+
+            Dictionary<Vector3, int> value;
             if (!boardstate.TryGetValue(pos, out value))
             {
                 Debug.Log("Invalid position in pathfinder boardstate!");
                 return;
             }
 
-            value.OnUpdate(obj);
+            foreach (Vector3 child in value.Keys)
+            {
+                Dictionary<Vector3, int> links;
+                if (boardstate.TryGetValue(child, out links))
+                {
+                    // Update cost to pos.
+                    links[pos] = cost;
+                }
+            }
+
+            cache = new Dictionary<Vector3, Dictionary<Vector3, List<Vector3>>>();
         }
     }
 }
